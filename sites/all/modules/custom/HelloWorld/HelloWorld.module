@@ -24,30 +24,56 @@ function HelloWorld_block_info() {
 
 function HelloWorld_block_view ($delta = '') {
   $block = array();
-
+  Global $user;
+  
   switch ($delta) {
-
+ 
     case 'hello_world':
       $block['subject'] = t('Hello World!!!');
       $block['content'] = t('This is Hellow World!!!');
     break;
 
+    case 'hello_user':
 
-    case 'hello_world':
-      $block['subject'] = t('Hello User!!!');
-      Global $user;
-      $block['content'] =  t('Hello @name', array(@name => $user->name));
+      
+      if($user->uid)  
+        {
+//        $account = user_load(arg($user->uid));
+//        print_r('here is $user' . t('@name', array(@name => $account)));
+        $block['subject'] = t('Hello User!!!');
+//        $block['content'] =  t('Hello fuck');
+        $block['content'] =  t('Hello @name', array(@name => $user->name));
+        }
     break;
   
   
     case 'user_info':
-       $block['subject'] = t('User Info');
-       $block['content'] = t('Testing!');      
-       
-       /*
-        * to get to show up just on user profile pages
-        * 
-        */
+//      dpm($_GET);
+//      dpm(arg(0));
+//      dpm(arg(1));
+      dpm($GLOBALS, $name='GLOBALS');
+   
+             
+       /*to get to show up just on user profile pages*/
+      if (arg(0) == 'user' && is_numeric(arg(1))) {
+        $account = user_load(arg(1));
+        dpm($account, $name = '$account');
+        
+          if(!empty($account)) {
+//            print_r('You are in!');
+            $block['subject'] = t('User Info - only on User pages');
+            $output = '';
+            $output .= '<div> <label>' . t('Name') . '</label>' . $account->name . '</div>';
+            $output .= '<div> <label>' . t('Created') . '</label>' . format_date($account->created) . '</div>';
+            $output .= '<div> <label>' . t('Last Accessed') . '</label>' . format_date($account->access) . '</div>';
+            
+            $block['content'] = $output;  
+            
+//            $block['content'] = t('I should only show on user pages!');  
+          }
+        
+      }
+
        
     break;
   

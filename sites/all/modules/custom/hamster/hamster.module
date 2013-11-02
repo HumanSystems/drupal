@@ -1,0 +1,20 @@
+<?php
+
+function hamster_menu() {
+  $items = array();
+  
+  $items ['hello'] = array (
+    'title' => 'Hello Hamsters!',
+    'page callback' => 'hamster_hello',
+    'access arguments' => array('access content'),
+    'menu_name' => 'main-menu',
+    'weight' => 5,
+  );
+  
+return $items;
+  
+}
+
+function hamster_hello () {
+  return t('Hello Hamster!');
+}
